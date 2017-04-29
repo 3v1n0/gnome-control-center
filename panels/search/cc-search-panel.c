@@ -26,6 +26,8 @@
 #include <gio/gdesktopappinfo.h>
 #include <glib/gi18n.h>
 
+#define MAX_ROWS_VISIBLE 7
+
 CC_PANEL_REGISTER (CcSearchPanel, cc_search_panel)
 
 #define WID(s) GTK_WIDGET (gtk_builder_get_object (self->priv->builder, s))
@@ -557,6 +559,8 @@ search_providers_discover_ready (GObject *source,
       g_object_unref (provider);
     }
 
+  cc_list_box_adjust_scrolling (GTK_LIST_BOX (self->priv->list_box));
+
   /* propagate a write to GSettings, to make sure we always have
    * all the providers in the list.
    */
@@ -762,6 +766,13 @@ cc_search_panel_init (CcSearchPanel *self)
   populate_search_providers (self);
 
   widget = WID ("search_vbox");
+
+  /* For the cc_list_box_adjust_scrolling () helper function. */
+  g_object_set_data (G_OBJECT (self->priv->list_box),
+                     "cc-scrolling-scrolled-window", widget);
+  g_object_set_data (G_OBJECT (self->priv->list_box),
+                     "cc-max-rows-visible", GUINT_TO_POINTER (MAX_ROWS_VISIBLE));
+
   gtk_container_add (GTK_CONTAINER (self), widget);
 }
 
