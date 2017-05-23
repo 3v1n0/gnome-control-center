@@ -48,7 +48,6 @@ struct _CEPageIP6
         GtkToggleButton *disabled;
         GtkWidget       *address_list;
         GtkWidget       *dns_entry;
-        GtkSwitch       *auto_routes;
         GtkWidget       *routes_list;
         GtkWidget       *never_default;
 };
